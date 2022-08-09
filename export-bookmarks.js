@@ -1,6 +1,9 @@
 const fs = require('fs');
 const path = require('path');
 
+const bookmarkFolder = 'google'; // define bookmark folder name here
+const outputFile = 'testoutput.json'; // define output filename here
+
 function newItem(name, url) {
   return { name, url };
 }
@@ -11,14 +14,12 @@ const bookmarkPath = path.join(
 );
 const json = JSON.parse(fs.readFileSync(bookmarkPath));
 const items = json.roots.bookmark_bar.children.find(
-  (obj) => obj.name === 'google' // define bookmark folder name here
+  (obj) => obj.name === bookmarkFolder
 ).children;
-
-const outputFile = 'testoutput.json'; // define output filename here
 const output = [];
 
+// output file already exists
 if (fs.existsSync(outputFile)) {
-  console.log('Output file already exists...');
   const existingItems = JSON.parse(fs.readFileSync(outputFile));
 
   // do not include items which have been deleted from bookmarks
@@ -36,12 +37,14 @@ if (fs.existsSync(outputFile)) {
       output.push(newItem(item.name, item.url));
     }
   });
-} else {
-  console.log('Output file does not exist yet...');
+}
+// output file does not exist yet
+else {
   items.forEach((item) => output.push(newItem(item.name, item.url)));
 }
 
 const outputJson = JSON.stringify(output, null, 2);
+
 fs.writeFile(outputFile, outputJson, (err) => {
   if (err) {
     throw err;
