@@ -1,26 +1,36 @@
 const fs = require('fs');
-const path = require('path');
 
-const bookmarkFolder = 'google'; // define bookmark folder name here
-const outputFile = 'testoutput.json'; // define output filename here
+const BOOKMARK_PATH = `${process.env.HOME}/Library/Application Support/Google/Chrome/Default/Bookmarks`;
+const BOOKMARK_FOLDER = 'google'; // define bookmark folder name here
+const OUTPUT_FILE = 'testoutput.json'; // define output filename here
+const output = [];
 
 function newItem(name, url) {
   return { name, url };
 }
 
-const bookmarkPath = path.join(
-  process.env.HOME,
-  '/Library/Application Support/Google/Chrome/Default/Bookmarks'
-);
-const json = JSON.parse(fs.readFileSync(bookmarkPath));
+const json = JSON.parse(fs.readFileSync(BOOKMARK_PATH));
 const items = json.roots.bookmark_bar.children.find(
-  (obj) => obj.name === bookmarkFolder
+  (obj) => obj.name === BOOKMARK_FOLDER
 ).children;
-const output = [];
+
+// todo: can use type property to identify folders 👇🏻
+if (json.roots.bookmark_bar.children) {
+  console.log('bookmark_bar.children');
+  console.dir(json.roots.bookmark_bar.children);
+
+  // get bookmarks in folders (one level down)
+  if (json.roots.bookmark_bar.children.children) {
+    console.log('bookmark_bar.children.children');
+
+    console.dir(json.roots.bookmark_bar.children.children);
+  }
+}
+// todo: can use type property to identify folders 👆🏻
 
 // output file already exists
-if (fs.existsSync(outputFile)) {
-  const existingItems = JSON.parse(fs.readFileSync(outputFile));
+if (fs.existsSync(OUTPUT_FILE)) {
+  const existingItems = JSON.parse(fs.readFileSync(OUTPUT_FILE));
 
   // do not include items which have been deleted from bookmarks
   existingItems.forEach((existingItem) => {
@@ -45,7 +55,7 @@ else {
 
 const outputJson = JSON.stringify(output, null, 2);
 
-fs.writeFile(outputFile, outputJson, (err) => {
+fs.writeFile(OUTPUT_FILE, outputJson, (err) => {
   if (err) {
     throw err;
   }
