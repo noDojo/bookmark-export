@@ -15,6 +15,7 @@ const items = json.roots.bookmark_bar.children.find(
 ).children;
 
 // todo: can use type property to identify folders 👇🏻
+// note: type values: folder, url
 if (json.roots.bookmark_bar.children) {
   console.log('bookmark_bar.children');
   console.dir(json.roots.bookmark_bar.children);
