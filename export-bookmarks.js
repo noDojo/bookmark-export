@@ -14,20 +14,18 @@ const items = json.roots.bookmark_bar.children.find(
   (obj) => obj.name === BOOKMARK_FOLDER
 ).children;
 
-// todo: can use type property to identify folders 👇🏻
-// note: type values: folder, url
-if (json.roots.bookmark_bar.children) {
-  console.log('bookmark_bar.children');
-  console.dir(json.roots.bookmark_bar.children);
+// const bookmarkBarFolders = json.roots.bookmark_bar.children.filter((obj) => obj.type === 'folder');
+// console.log(bookmarkBarFolders);
+// console.log(Object.entries(bookmarkBarFolders));
 
-  // get bookmarks in folders (one level down)
-  if (json.roots.bookmark_bar.children.children) {
-    console.log('bookmark_bar.children.children');
+// const bookmarkBarUrls = json.roots.bookmark_bar.children.filter((obj) => obj.type === 'url');
+// console.log(bookmarkBarUrls);
 
-    console.dir(json.roots.bookmark_bar.children.children);
-  }
-}
-// todo: can use type property to identify folders 👆🏻
+// const otherFolders = json.roots.other.children.filter((obj) => obj.type === 'folder');
+// console.log(otherFolders);
+
+// const otherUrls = json.roots.other.children.filter((obj) => obj.type === 'url');
+// console.log(otherUrls);
 
 // output file already exists
 if (fs.existsSync(OUTPUT_FILE)) {
